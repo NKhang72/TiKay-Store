@@ -1,0 +1,123 @@
+﻿@model IEnumerable<TiKayStore.Models.tb_ProductCategory>
+@{
+    ViewBag.Title = "Danh mục đang ẩn";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Danh mục</a>
+        </li>
+    </ul>
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Quản lý danh mục</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Danh Mục</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Danh sách danh mục</h3>
+
+                <div class="card-tools">
+                    <a href="/Admin/Category" class="btn btn-light"> Quay lại</a>
+                    <a href="/Admin/Category/add" class="btn btn-primary"> Thêm mới</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên Danh Mục</th>
+                            <th>Mô tả</th>
+                            <th></th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @if (Model != null || Model.Any())
+                        {
+                            foreach (var i in Model)
+                            {
+                                <tr id="trow_@i.id">
+                                    <td>@i.id</td>
+                                    <td>@i.Title</td>
+                                    <td>@i.Description</td>
+                                    <td>
+                                        <a href="/admin/category/edit/@i.id" class="btn btn-sm btn-primary">Sửa</a>
+                                        <a href="#" data-id="@i.id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">Không có dữ liệu</td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+
+            </div>
+            <!-- /.card-footer-->
+        </div>
+        <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+    @section scripts{
+        <script>
+            $(document).ready(function () {
+                $('body').on('click', '.btnDelete', function () {
+                    var id = $(this).data("id");
+
+                    var conf = confirm('Bạn muốn xóa danh mục này không?');
+                    if (conf === true) {
+                        $.ajax({
+                            url: '/admin/category/delete',
+                            type: 'POST',
+                            data: { id: id },
+                            success:  function(rs) {
+                                if (rs.success) {
+                                    $('#trow_' + id).remove();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+    }
+</div>
