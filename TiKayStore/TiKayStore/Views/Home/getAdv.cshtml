@@ -1,0 +1,23 @@
+﻿@model IEnumerable<TiKayStore.Models.tb_Advertisement>
+
+@foreach (var i in Model)
+{
+    <div class="main_slider" style="background-image:url(@i.Image)">
+        <div class="container fill_height">
+            <div class="row align-items-center fill_height">
+                <div class="col">
+                    <!-- Có foreach nó ko ra dòng h6 h1 -->
+                    <div class="main_slider_content">
+                        <h6>@i.Title</h6>
+                        <h1>@i.Description</h1>
+                        <div class="red_button shop_now_button"><a href="https://localhost:44367/Category">shop now</a></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+}
+

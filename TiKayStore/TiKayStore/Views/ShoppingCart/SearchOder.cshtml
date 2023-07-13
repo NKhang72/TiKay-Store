@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "SearchOder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container ">
+    <div class="row">
+        <div class="col product_section clearfix">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li class="active"><a href="/"><i class="fa fa-angle-right" aria-hidden="true"></i>Giỏ hàng</a></li>
+                </ul>
+            </div>
+
+            <!-- Sidebar -->
+            <!-- Main Content -->
+
+            <div class="row">
+                <div class="col-md-12" id="load_data">
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper" style="margin-bottom: 100px">
+
+                        <!-- Main content -->
+                        <h2 class="text-center display-4">Tra cứu đơn hàng</h2>
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                @using (Html.BeginForm("GetOrderbyPhone", "ShoppingCart", FormMethod.Post, new { }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+                                    <div class="input-group">
+                                        @Html.TextBox("sdt", "", new { @class = "form-control form-control-lg", placeholder = "Vui lòng nhập số điện thoại" })
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-lg btn-default ">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="baitestiq">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnCapNhat', function () {
+                var tt = $('#sdt').val();
+                if (tt == "") {
+                    alert("Vui lòng nhập số điện thoại")
+                }
+                else {
+                    $.ajax({
+                        dataType: "Html",
+                        type: "POST",
+                        url: '@Url.Action("GetOrderbyPhone","ShoppingCart")',
+                        data: { phone: tt },
+                        success: function (a) {
+                            // Replace the div's content with the page method's return.
+                            alert("success");
+                            $('#baitestiq').html(a);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown)}
+                    });
+                }
+
+
+
+            });
+        });
+    </script>
+}

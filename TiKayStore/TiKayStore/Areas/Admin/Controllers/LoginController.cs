@@ -50,8 +50,12 @@ namespace TiKayStore.Areas.Admin.Controllers
                     {
                         ModelState.AddModelError("", "Tài khoản không tồn tại");
                     }
+                    else if (result == -4)
+                    {
+                        ModelState.AddModelError("", "Mật khẩu phải ít nhất 6 ký tự");
+                    }
 
-                }
+            }
                 return View("Index");
             }
             public ActionResult ListUser(int? page)

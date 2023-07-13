@@ -1,0 +1,100 @@
+﻿@model IEnumerable<TiKayStore.Models.tb_Order>
+
+@{
+    ViewBag.Title = "GetOrderbyPhone";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container ">
+    <div class="row">
+        <div class="col product_section clearfix">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li class="active"><a href="/"><i class="fa fa-angle-right" aria-hidden="true"></i>Giỏ hàng</a></li>
+                </ul>
+            </div>
+
+            <!-- Sidebar -->
+            <!-- Main Content -->
+
+            <div class="row">
+                <div class="col-md-12" id="load_data">
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Main content -->
+                        <h2 class="text-center display-4">Tra cứu đơn hàng</h2>
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                @using (Html.BeginForm("GetOrderbyPhone", "ShoppingCart", FormMethod.Post, new { }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+                                    <div class="input-group">
+                                        @Html.TextBox("sdt", "", new { @class = "form-control form-control-lg", placeholder = "Vui lòng nhập số điện thoại" })
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-lg btn-default ">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+
+                                    <th>Mã đơn hàng</th>
+                                    <th>Tên Khách hàng</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+
+                                            <td>@item.Code</td>
+                                            <td>@item.CustomerName</td>
+                                            <td>@item.Phone</td>
+                                            <td>@TiKayStore.Models.Common.Common.FormatNumber(item.TotalAmount, 0)</td>
+                                            <td>@(item.TypePay=="1"?"Chờ thành toán":"Đã thanh toán")</td>
+                                            <td>@item.CreateDate.ToString()</td>
+                                            <td>
+                                                <a href="/shoppingcart/vieworder/@item.id" class="btn btn-sm btn-success">Chi Tiết</a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th colspan="7">Không có sản phẩm trong giỏ hàng!!</th>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

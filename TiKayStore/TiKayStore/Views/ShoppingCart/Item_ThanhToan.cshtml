@@ -1,0 +1,32 @@
+﻿@model IEnumerable<TiKayStore.Models.ShoppingCartItem>
+@using TiKayStore.Models.Common
+
+@if (Model != null && Model.Any())
+{
+
+
+    var tongtien = decimal.Zero;
+
+    <ul class="list-group mb-3">
+        @foreach (var item in Model)
+        {
+            tongtien += item.TotalPrice;
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">
+                        @item.ProductName
+                    </h6>
+                    <small class="text-muted">@Common.FormatNumber(item.Price, 0) * @item.Quantity</small>
+                </div>
+
+            </li>
+        }
+        <li class="list-group-item d-flex justify-content-between">
+            <span>Tổng thành tiền</span> <strong text="torel">@Common.FormatNumber(tongtien, 0)</strong>
+        </li>
+    </ul>
+}
+else
+{
+}
+

@@ -1,0 +1,5 @@
+﻿@model IEnumerable<TiKayStore.Models.tb_Menu>
+@foreach (var i in Model)
+{
+    <li class="menu_item">  @Html.ActionLink(@i.Title, "Index", @i.Title)</li>
+}

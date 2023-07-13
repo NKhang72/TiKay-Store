@@ -1,0 +1,47 @@
+﻿@model  IEnumerable<TiKayStore.Models.tb_ProductCategory>
+<ul class="sidebar_categories">
+    @*<ul @foreach (var i in Model) { if (i.Meta == ".phone") { <li class="active"><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>@Html.ActionLink(i.Title, "getProductbyMeta", "Category", new { @meta = i.Meta }, null)</li>
+            break;
+
+        }
+        else if (i.Meta == ".tablet")
+        {
+            <li class="active"><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>@Html.ActionLink(i.Title, "getProductbyMeta", "Category", new { @meta = i.Meta }, null)</li>
+            break;
+
+        }
+        else if (i.Meta == ".laptop")
+        {
+            <li class="active"><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>@Html.ActionLink(i.Title, "getProductbyMeta", "Category", new { @meta = i.Meta }, null)</li>
+            break;
+
+
+        }
+        else if (i.Meta == ".accessories")
+        {
+            <li class="active"><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>@Html.ActionLink(i.Title, "getProductbyMeta", "Category", new { @meta = i.Meta }, null)</li>
+            break;
+
+
+        }
+        else
+        {
+            <li>@Html.ActionLink(i.Title, "getProductbyMeta", "Category", new { @meta = i.Meta }, null)</li>
+
+        }
+
+        <br>
+
+
+        }*@
+    @foreach (var j in Model)
+    {
+        <li>
+            @Html.ActionLink(j.Title, "getProductbyMeta", "Category", new { j.id }, null)
+        </li>
+    }
+</ul>
+
+</ul>
+
+
