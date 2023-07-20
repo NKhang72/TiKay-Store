@@ -392,9 +392,9 @@ jQuery(document).ready(function($)
 		$( "#slider-range" ).slider(
 		{
 			range: true,
-			min: 0,
-			max: 1000,
-			values: [ 0, 580 ],
+			min: 1000000,
+			max: 100000000,
+			values: [2500000, 10000000 ],
 			slide: function( event, ui )
 			{
 				$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
