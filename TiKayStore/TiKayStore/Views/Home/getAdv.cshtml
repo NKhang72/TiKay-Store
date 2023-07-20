@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<TiKayStore.Models.tb_Advertisement>
 
+
 @foreach (var i in Model)
 {
     <div class="main_slider" style="background-image:url(@i.Image)">
@@ -8,9 +9,11 @@
                 <div class="col">
                     <!-- Có foreach nó ko ra dòng h6 h1 -->
                     <div class="main_slider_content">
-                        <h6>@i.Title</h6>
-                        <h1>@i.Description</h1>
-                        <div class="red_button shop_now_button"><a href="https://localhost:44367/Category">shop now</a></div>
+                        <h6 style=" /* font-size: xx-large; */ /* font-style: italic; */ font: initial; font-size: xx-large; font-style: italic; ">@i.Title</h6>
+                        <h1 style=" font-size: xxx-large; color: brown; ">@i.Description</h1>
+                        <div class="red_button shop_now_button">
+                        @Html.ActionLink("SHOP NOW", "getProductbyMeta", "Category", new {id=1}, null)
+                        </div>
                     </div>
                 </div>
 
