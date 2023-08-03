@@ -15,6 +15,7 @@ namespace TiKayStore.Areas.Admin.Controllers
         // GET: Admin/Products
         public ActionResult Index(int? page)
         {
+
             IEnumerable<tb_Product> items = db.tb_Product.OrderByDescending(x => x.id);
             var pageSize = 10;
             if (page == null)
@@ -26,6 +27,107 @@ namespace TiKayStore.Areas.Admin.Controllers
             ViewBag.PageSize = pageSize;
             ViewBag.Page = page;
             return View(items);
+        }
+        public ActionResult Sort(int? page, String typeSort, String aS)
+        {
+            IEnumerable<tb_Product> items = db.tb_Product.OrderByDescending(x => x.id);
+            if (aS == "OrderByDescending")
+            {
+                if (typeSort == "price")
+                {
+                    items = db.tb_Product.OrderByDescending(x => x.Price);
+                }
+                else if (typeSort == "priceSale")
+                {
+                    items = db.tb_Product.OrderByDescending(x => x.PriceSale);
+
+                }
+                else if (typeSort == "quanility")
+                {
+                    items = db.tb_Product.OrderByDescending(x => x.Quantity);
+
+                }
+                else if (typeSort == "name")
+                {
+                    items = db.tb_Product.OrderByDescending(x => x.Title);
+                }
+                else if (typeSort == "createDate")
+                {
+                    items = db.tb_Product.OrderByDescending(x => x.CreateDate);
+                }
+                else if (typeSort == "hide")
+                {
+                    items = db.tb_Product.OrderByDescending(x => x.Hide);
+                }
+                else if (typeSort == "sale")
+                {
+                    items = db.tb_Product.OrderByDescending(x => x.Sale);
+                }
+            }
+            else
+            {
+                if (typeSort == "price")
+                {
+                    items = db.tb_Product.OrderBy(x => x.Price);
+                }
+                else if (typeSort == "priceSale")
+                {
+                    items = db.tb_Product.OrderBy(x => x.PriceSale);
+
+                }
+                else if (typeSort == "quanility")
+                {
+                    items = db.tb_Product.OrderBy(x => x.Quantity);
+
+                }
+                else if (typeSort == "name")
+                {
+                    items = db.tb_Product.OrderBy(x => x.Title);
+                }
+                else if (typeSort == "createDate")
+                {
+                    items = db.tb_Product.OrderBy(x => x.CreateDate);
+                }
+                else if (typeSort == "hide")
+                {
+                    items = db.tb_Product.OrderBy(x => x.Hide);
+                }
+                else if (typeSort == "sale")
+                {
+                    items = db.tb_Product.OrderBy(x => x.Sale);
+                }
+            }
+            var pageSize = 10;
+            if (page == null)
+            {
+                page = 1;
+            }
+            var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            items = items.ToPagedList(pageIndex, pageSize);
+            ViewBag.PageSize = pageSize;
+            ViewBag.Page = page;
+            return View(items);
+        }
+        public ActionResult Search(int? page, string SearchString)
+        {
+            if (SearchString == "")
+            {
+                return RedirectToAction("Index", "Products"); ;
+            }
+            else
+            {
+                IEnumerable<tb_Product> items = db.tb_Product.Where(x => x.Title.Contains(SearchString)).OrderBy(x => x.id);
+                var pageSize = 10;
+                if (page == null)
+                {
+                    page = 1;
+                }
+                var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+                items = items.ToPagedList(pageIndex, pageSize);
+                ViewBag.PageSize = pageSize;
+                ViewBag.Page = page;
+                return View(items);
+            }
         }
         public ActionResult IndexbyCategori(int? page, int CategoryID)
         {

@@ -83,13 +83,13 @@
                                             @Html.ValidationMessageFor(x => x.ProductCategory, null, new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Mô tả</label>
-                                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", @placeholder = "Mã mã phẩm" })
+                                            <label for="exampleInputEmail1">Cấu hình</label>
+                                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", @placeholder = "Mã mã phẩm" , @id = "txtDetail"})
                                             @Html.ValidationMessageFor(x => x.Description, null, new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Chi tiết sản phẩm</label>
-                                            @Html.TextAreaFor(x => x.Detail, new { @class = "form-control", @id = "txtDetail" })
+                                            @Html.TextAreaFor(x => x.Detail, new { @class = "form-control", @id = "txtDetails" })
                                             @Html.ValidationMessageFor(x => x.Detail, null, new { @class = "text-danger" })
                                         </div>
                                         <div class="row">
@@ -230,6 +230,11 @@
                 $('#OriginalPrice').autoNumeric('set', demoGet);
             });
             CKEDITOR.replace('txtDetail', {
+                customConfig: '/content/ckeditor/config.js',
+                extraAllowedContent: 'span',
+            });
+            
+            CKEDITOR.replace('txtDetails', {
                 customConfig: '/content/ckeditor/config.js',
                 extraAllowedContent: 'span',
             });

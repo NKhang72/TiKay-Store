@@ -45,11 +45,31 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"> @ViewBag.Title</h3>
+            <h3 class="card-title">@ViewBag.Title</h3>
 
             <div class="card-tools">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        @using (Html.BeginForm("Search", "Products", FormMethod.Post, new { @class = "d-flex align-items-center dropdown-item" }))
+                        {
+                            <div class="form-outline" style="margin-right:10px">
+                                @Html.TextBox("SearchString", null, new { @class = "form-control " })
+
+                            </div>
+
+
+                        }
+
+
+
+                    </div>
+                </div>
                 <a href="/admin/products/add" class="btn btn-primary">Thêm mới</a>
                 <a href="#" class="btn btn-danger" id="BtnDeleteAll">Xóa</a>
+
             </div>
         </div>
         <div class="card-body">
@@ -123,8 +143,8 @@
                                 <td>@item.Title</td>
                                 <td>@item.tb_ProductCategory.Title</td>
                                 <td>@item.Quantity</td>
-                                <td>@item.Price, 0</td>
-                                <td>@item.PriceSale, 0</td>
+                                <td>@TiKayStore.Models.Common.Common.FormatNumber(item.Price)</td>
+                                <td>@TiKayStore.Models.Common.Common.FormatNumber(item.PriceSale)</td>
                                 <td>@item.CreateDate.ToString()</td>
                                 <td class="text-center">
                                     <a href='#' data-id="@item.id" class="btnHome">@Html.Raw(strCheckSale)</a>

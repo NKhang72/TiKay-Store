@@ -48,8 +48,28 @@
             <h3 class="card-title">@ViewBag.Title</h3>
 
             <div class="card-tools">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        @using (Html.BeginForm("Search", "Products", FormMethod.Post, new { @class = "d-flex align-items-center dropdown-item" }))
+                        {
+                            <div class="form-outline" style="margin-right:10px">
+                                @Html.TextBox("SearchString", null, new { @class = "form-control " })
+
+                            </div>
+
+
+                        }
+
+
+
+                    </div>
+                </div>
                 <a href="/admin/products/add" class="btn btn-primary">Thêm mới</a>
                 <a href="#" class="btn btn-danger" id="BtnDeleteAll">Xóa</a>
+
             </div>
         </div>
         <div class="card-body">
@@ -72,14 +92,31 @@
                         <th><input type="checkbox" id="SelectAll" /></th>
                         <th>STT</th>
                         <th>Hình ảnh</th>
-                        <th>Tên sản phẩm</th>
+                        <th>
+                            @Html.ActionLink("Tên sản phẩm", "Sort", "Products", new { typeSort = "name", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            
+                        </th>
                         <th>Danh mục</th>
-                        <th>Số lượng</th>
-                        <th>Giá</th>
-                        <th>Giá KM</th>
-                        <th>Ngày tạo</th>
-                        <th>Sale</th>
-                        <th>Hiển thị</th>
+                        <th>
+                            @Html.ActionLink("Số lượng", "Sort", "Products", new { typeSort = "quanility", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            
+                        </th>
+                        <th>
+                            @Html.ActionLink("Giá", "Sort", "Products", new { typeSort="price", aS= "OrderByDescending" }, new {@style= "color: #000000;" })
+
+                        </th>
+                        <th>
+                            @Html.ActionLink("GiáKM", "Sort", "Products", new { typeSort = "priceSale", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Ngày tạo", "Sort", "Products", new { typeSort = "createDate", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Sale", "Sort", "Products", new { typeSort = "sale", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Hiển thị", "Sort", "Products", new { typeSort = "hide", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                        </th>
 
                         <th style="width:150px;"></th>
                     </tr>

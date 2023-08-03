@@ -1,0 +1,36 @@
+﻿@model TiKayStore.Areas.Admin.Model.SearchOrder
+<div class="btn-group">
+    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-search"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" style="width:300px !important">
+        @using (Html.BeginForm("Search", "ShoppingCart", FormMethod.Post, new { @class = "dropdown-item" }))
+        {
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+            <div class="form-outline" style="display:flex">
+                @Html.TextBoxFor(x => x.SearchString, null, new { @class = "form-control ", @style = "margin-right:10px;" })
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.SearchType, "Số điện thoại", new { @class = "form-check-input", @Checked = "checked" })
+                <label class="form-check-label" for="flexCheckDisabled">
+                    Số điện thoại
+                </label>
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.SearchType, "Mã đơn hàng", new { @class = "form-check-input" })
+                <label class="form-check-label" for="flexCheckDisabled">
+                    Mã đơn hàng
+                </label>
+            </div>
+            <div class="form-check">
+                @Html.RadioButtonFor(m => m.SearchType, "Tên khách hàng", new { @class = "form-check-input" })
+                <label class="form-check-label" for="flexCheckDisabled">
+                    Tên khách hàng
+                </label>
+            </div>
+
+        }
+
+    </div>
+</div>

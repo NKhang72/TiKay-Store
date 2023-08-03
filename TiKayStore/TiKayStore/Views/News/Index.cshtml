@@ -1,5 +1,5 @@
-﻿@model IEnumerable<TiKayStore.Models.tb_News>
-
+﻿@model PagedList.PagedList<TiKayStore.Models.tb_News>
+@using PagedList.Mvc
 @*@model PagedList.PagedList<WebBanHangOnline.Models.EF.News>
     @using PagedList.Mvc;
     @using PagedList;*@
@@ -50,18 +50,18 @@
                     <div class="content-box">
                         <h3><a href="/News/getNewsbyId/@item.id" title="@item.Title">@item.Title</a></h3>
                         <div class="description-box">
-                            @item.CreateDate | @item.CreateBy
+                            @item.CreateDate | @item.tb_User.lastName @item.tb_User.firstName
                         </div>
                     </div>
                 </div>
             </div>
         }
-        @*<div class="row">
-                <div class="col-6"></div>
-                <div class="col-6" style="text-align:right;">
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
-                </div>
-            </div>*@
+        <div class="row">
+            <div class="col-6"></div>
+            <div class="col-6" style="text-align:right;">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+            </div>
+        </div>
     }
 </div>
 

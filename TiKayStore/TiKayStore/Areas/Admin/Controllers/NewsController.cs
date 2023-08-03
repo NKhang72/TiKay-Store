@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
 using TiKayStore.Models;
 
 namespace TiKayStore.Areas.Admin.Controllers
@@ -36,9 +35,16 @@ namespace TiKayStore.Areas.Admin.Controllers
         public ActionResult Add(tb_News model)
         {
             if (ModelState.IsValid)
-            {
+            { 
+                UserLogin userLogin = (UserLogin)Session["USER_SESSION"];
+                model.CreateBy = db.tb_User.Find(userLogin.UserId).id; 
                 model.CreateDate = DateTime.Now;
                 model.ModifierDate = DateTime.Now;
+                model.CategoryId = model.CategoryId;
+                model.SeoKeywords = model.SeoKeywords;
+                model.ModifierBy=model.ModifierBy;
+                model.Position=model.Position;
+                model.Detail = model.Detail;
                 if (string.IsNullOrEmpty(model.Meta))
                     model.Meta = TiKayStore.Models.Common.Filter.FilterChar(model.Title);
                 var hide = Request.Form.GetValues("hide")[0];
@@ -52,7 +58,28 @@ namespace TiKayStore.Areas.Admin.Controllers
                 }
 
                 db.tb_News.Add(model);
-                db.SaveChanges();
+                try
+                {
+                    // Your code...
+                    // Could also be before try if you know the exception occurs in SaveChanges
+
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var eve in e.EntityValidationErrors)
+                    {
+                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    throw;
+                }
+                
                 return RedirectToAction("Index");
             }
             return View(model);

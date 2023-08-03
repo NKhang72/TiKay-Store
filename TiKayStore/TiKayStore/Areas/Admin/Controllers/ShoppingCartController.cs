@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using TiKayStore.Models;
+using TiKayStore.Areas.Admin.Model;
 using PagedList;
 
 namespace TiKayStore.Areas.Admin.Controllers
@@ -26,6 +27,7 @@ namespace TiKayStore.Areas.Admin.Controllers
             var pageSize = 10;
             ViewBag.PageSize = pageSize;
             ViewBag.Page = pageNumber;
+            
             return View(items.ToPagedList(pageNumber, pageSize));
         }
         [HttpPost]
@@ -56,6 +58,54 @@ namespace TiKayStore.Areas.Admin.Controllers
         {
             var item = db.tb_Order.Find(id);
             return View(item);
+        }
+        public ActionResult SearchPartialView()
+        {
+           
+            return PartialView();
+        }
+        public ActionResult Search(int? page, SearchOrder searchOrder)
+        {
+            if (ModelState.IsValid) {
+                if (searchOrder.SearchString == null)
+                {
+                    ModelState.AddModelError("", "Tài khoản chưa được kích hoạt");
+                }
+                else
+                {
+                    IEnumerable<tb_Order> items;
+                    if (searchOrder.SearchType == "Số điện thoại")
+                    {
+                        items = db.tb_Order.Where(x => x.Phone.Contains(searchOrder.SearchString)).OrderBy(x => x.id);
+
+                    }
+                    else if (searchOrder.SearchType == "Mã đơn hàng")
+                    {
+                        items = db.tb_Order.Where(x => x.Code.Contains(searchOrder.SearchString)).OrderBy(x => x.id);
+
+                    }
+                    else
+                    {
+                        items = db.tb_Order.Where(x => x.CustomerName.Contains(searchOrder.SearchString)).OrderBy(x => x.id);
+
+                    }
+                    var pageSize = 10;
+                    if (page == null)
+                    {
+                        page = 1;
+                    }
+                    var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+                    items = items.ToPagedList(pageIndex, pageSize);
+                    ViewBag.PageSize = pageSize;
+                    ViewBag.Page = page;
+
+                    return View(items);
+                }
+            }
+            return View("Index");
+
+
+
         }
     }
 }

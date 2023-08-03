@@ -25,7 +25,7 @@ namespace TiKayStore.Areas.Admin.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
-            return PartialView();
+            
         }
     }
 }

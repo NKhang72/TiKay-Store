@@ -1,21 +1,20 @@
-﻿@model PagedList.PagedList<TiKayStore.Models.tb_Product>
-@using PagedList.Mvc
+﻿@model List<TiKayStore.Models.tb_Product>
 @{
-    ViewBag.Title = "getProductbyMeta";
+    ViewBag.Title = "Search";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
 
     .price {
         display: block
     }
 
-        .price:hover, .price:active {
-            font-family: 'Modern No. 20';
-            color: #fff
-        }
+    .price:hover, .price:active {
+        font-family: 'Modern No. 20';
+        color: #fff
+    }
 </style>
-
 <div class="container ">
     <div class="row">
         <div class="col product_section clearfix">
@@ -39,7 +38,6 @@
 
                     @{Html.RenderAction("getCategoriesSlideBar", "Category"); }
                 </div>
-
                 <!-- Price Range Filtering -->
                 <div class="sidebar_section">
                     <div class="sidebar_title">
@@ -81,60 +79,89 @@
                                             <li class="type_sorting_btn" data-isotope-option='{ "sortBy": "name" }'><span>Product Name</span></li>
                                         </ul>
                                     </li>
-
+                                    <li>
+                                        <span>Show</span>
+                                        <span class="num_sorting_text">6</span>
+                                        <i class="fa fa-angle-down"></i>
+                                        <ul class="sorting_num">
+                                            <li class="num_sorting_btn"><span>6</span></li>
+                                            <li class="num_sorting_btn"><span>12</span></li>
+                                            <li class="num_sorting_btn"><span>24</span></li>
+                                        </ul>
+                                    </li>
                                 </ul>
+                                <div class="pages d-flex flex-row align-items-center">
+                                    <div class="page_current">
+                                        <span>1</span>
+                                        <ul class="page_selection">
+                                            <li><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="page_total"><span>of</span> 3</div>
+                                    <div id="next_page" class="page_next"><a href="#"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
+                                </div>
 
                             </div>
 
                             <!-- Product Grid -->
 
                             <div class="product-grid">
-
-                                @foreach (var i in Model)
+                                @if (Model.Count != 0)
                                 {
-                                    if (i.Sale.Equals(true))
+                                    foreach (var i in Model)
                                     {
-                                        int perent = (int)(100 - ((i.PriceSale * 100) / i.Price));
-                                        <div class="product-item">
-                                            <div class="product discount product_filter">
-                                                <div class="product_image">
-                                                    <img src="@i.Image" alt="">
-                                                </div>
-                                                <div class="favorite favorite_left"></div>
-                                                <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>@perent%</span></div>
-                                                <div class="product_info">
-                                                    <h6 class="product_name"> @Html.ActionLink(i.Title, "getProductDetails", "ProductDetail", new { @id = i.id }, null)</h6>
-                                                    <div class="product_price">@TiKayStore.Models.Common.Common.FormatNumber(i.PriceSale)<span>@TiKayStore.Models.Common.Common.FormatNumber(i.Price)</span></div>
+                                        if (i.Sale.Equals(true))
+                                        {
+                                            int perent = (int)(100 - ((i.PriceSale * 100) / i.Price));
+                                            <div class="product-item">
+                                                <div class="product discount product_filter">
+                                                    <div class="product_image">
+                                                        <img src="@i.Image" alt="">
+                                                    </div>
+                                                    <div class="favorite favorite_left"></div>
+                                                    <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>@perent%</span></div>
+                                                    <div class="product_info">
+                                                        <h6 class="product_name"> @Html.ActionLink(i.Title, "getProductDetails", "ProductDetail", new { @id = i.id }, null)</h6>
+                                                        <div class="product_price">@TiKayStore.Models.Common.Common.FormatNumber(i.PriceSale)<span>@TiKayStore.Models.Common.Common.FormatNumber(i.Price)</span></div>
 
+                                                    </div>
                                                 </div>
+                                                <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id=@i.id>add to cart</a></div>
                                             </div>
-                                            <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id=@i.id>add to cart</a></div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="product-item">
-                                            <div class="product discount product_filter">
-                                                <div class="product_image">
-                                                    <img src="@i.Image" alt="">
-                                                </div>
-                                                <div class="favorite favorite_left"></div>
+                                        }
+                                        else
+                                        {
+                                            <div class="product-item">
+                                                <div class="product discount product_filter">
+                                                    <div class="product_image">
+                                                        <img src="@i.Image" alt="">
+                                                    </div>
+                                                    <div class="favorite favorite_left"></div>
 
-                                                <div class="product_info">
-                                                    <h6 class="product_name"> @Html.ActionLink(i.Title, "getProductDetails", "ProductDetail", new { @id = i.id }, null)</h6>
-                                                    <div class="product_price">@TiKayStore.Models.Common.Common.FormatNumber(i.Price)</div>
+                                                    <div class="product_info">
+                                                        <h6 class="product_name"> @Html.ActionLink(i.Title, "getProductDetails", "ProductDetail", new { @id = i.id }, null)</h6>
+                                                        <div class="product_price">@TiKayStore.Models.Common.Common.FormatNumber(i.Price)</div>
+                                                    </div>
                                                 </div>
+                                                <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id=@i.id>add to cart</a></div>
                                             </div>
-                                            <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id=@i.id>add to cart</a></div>
-                                        </div>
+                                        }
                                     }
                                 }
-                            </div>
-                            <div class="row">
-                                <div class="col-6"></div>
-                                <div class="col-6" style="text-align:right;">
-                                    @Html.PagedListPager(Model, page => Url.Action("getProductbyMeta", new { page }))
-                                </div>
+                                else
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12" id="load_data">
+                                            <h2>Không tìm thấy kết quả phù hợp.</h2>
+                                        </div>
+
+                                    </div>
+                                }
+
+
+
                             </div>
                         </div>
                     </div>

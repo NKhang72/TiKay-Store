@@ -45,110 +45,121 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"> @ViewBag.Title</h3>
+            <h3 class="card-title">@ViewBag.Title</h3>
 
             <div class="card-tools">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        @using (Html.BeginForm("Search", "Products", FormMethod.Post, new { @class = "d-flex align-items-center dropdown-item" }))
+                        {
+                            <div class="form-outline" style="margin-right:10px">
+                                @Html.TextBox("SearchString", null, new { @class = "form-control " })
+
+                            </div>
+                        }
+
+                    </div>
+                </div>
                 <a href="/admin/products/add" class="btn btn-primary">Thêm mới</a>
                 <a href="#" class="btn btn-danger" id="BtnDeleteAll">Xóa</a>
+
             </div>
         </div>
         <div class="card-body">
             @*<div class="row">
-                    <div class="col-6">
-                        @using (Html.BeginForm("index", "News", FormMethod.Get, new { }))
-                        {
-                            <div class="input-group input-group-sm">
-                                @Html.TextBox("Searchtext", new { @class = "form-control" })
-                                <span class="input-group-append">
-                                    <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
-                                </span>
-                            </div>
-                        }
+            <div class="col-6">
+                @using (Html.BeginForm("index", "News", FormMethod.Get, new { }))
+                {
+                    <div class="input-group input-group-sm">
+                        @Html.TextBox("Searchtext", new { @class = "form-control" })
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
+                        </span>
                     </div>
-                </div>*@
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="SelectAll" /></th>
-                        <th>STT</th>
-                        <th>Hình ảnh</th>
-                        <th>
-                            @Html.ActionLink("Tên sản phẩm", "Sort", "Products", new { typeSort = "name", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                }
+            </div>
+        </div>*@
+            @if (Model.Count == 0)
+            {
+                <div class="row">
+                    <div class="col-md-12" id="load_data">
+                        <h2>Không tìm thấy kết quả phù hợp.</h2>
+                    </div>
 
-                        </th>
-                        <th>Danh mục</th>
-                        <th>
-                            @Html.ActionLink("Số lượng", "Sort", "Products", new { typeSort = "quanility", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
-
-                        </th>
-                        <th>
-                            @Html.ActionLink("Giá", "Sort", "Products", new { typeSort = "price", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
-
-                        </th>
-                        <th>
-                            @Html.ActionLink("GiáKM", "Sort", "Products", new { typeSort = "priceSale", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
-                        </th>
-                        <th>
-                            @Html.ActionLink("Ngày tạo", "Sort", "Products", new { typeSort = "createDate", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
-                        </th>
-                        <th>
-                            @Html.ActionLink("Sale", "Sort", "Products", new { typeSort = "sale", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
-                        </th>
-                        <th>
-                            @Html.ActionLink("Hiển thị", "Sort", "Products", new { typeSort = "hide", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
-                        </th>
-
-                        <th style="width:150px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
-                        foreach (var item in Model)
-                        {
-                            var strCheck = item.Hide.Value ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
-                            //var strCheckHome = item.IsHome ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
-                            var strCheckSale = item.Sale.Value ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
-                            var strImg = "";
-                            var CheckImage = item.Image;
-                            if (CheckImage != null)
-                            {
-                                strImg = CheckImage;
-                            }
-                            <tr id="trow_@item.id">
-                                <td><input type="checkbox" class="cbkItem" value="@item.id" /></td>
-                                <td>@i</td>
-                                <td><img class="imgproduct" data-id="@item.id" src="@strImg" width="50" /></td>
-                                <td>@item.Title</td>
-                                <td>@item.tb_ProductCategory.Title</td>
-                                <td>@item.Quantity</td>
-                                <td>@item.Price, 0</td>
-                                <td>@item.PriceSale, 0</td>
-                                <td>@item.CreateDate.ToString()</td>
-                                <td class="text-center">
-                                    <a href='#' data-id="@item.id" class="btnHome">@Html.Raw(strCheckSale)</a>
-                                </td>
-
-                                <td class="text-center">
-                                    <a href='#' data-id="@item.id" class="btnActive">@Html.Raw(strCheck)</a>
-                                </td>
-                                <td>
-                                    <a href="/admin/Products/edit/@item.id" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="#" data-id="@item.id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
-                                </td>
-                            </tr>
-                            i++;
-                        }
-                    }
-                    else
-                    {
+                </div>
+            }
+            else
+            {
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td colspan="4">Không có bản ghi nào!!!</td>
+                            <th><input type="checkbox" id="SelectAll" /></th>
+                            <th>STT</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Giá KM</th>
+                            <th>Ngày tạo</th>
+                            <th>Sale</th>
+                            <th>Hiển thị</th>
+
+                            <th style="width:150px;"></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+                            foreach (var item in Model)
+                            {
+                                var strCheck = item.Hide.Value ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                                //var strCheckHome = item.IsHome ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                                var strCheckSale = item.Sale.Value ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                                var strImg = "";
+                                var CheckImage = item.Image;
+                                if (CheckImage != null)
+                                {
+                                    strImg = CheckImage;
+                                }
+                                <tr id="trow_@item.id">
+                                    <td><input type="checkbox" class="cbkItem" value="@item.id" /></td>
+                                    <td>@i</td>
+                                    <td><img class="imgproduct" data-id="@item.id" src="@strImg" width="50" /></td>
+                                    <td>@item.Title</td>
+                                    <td>@item.tb_ProductCategory.Title</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@TiKayStore.Models.Common.Common.FormatNumber(item.Price)</td>
+                                    <td>@TiKayStore.Models.Common.Common.FormatNumber(item.PriceSale)</td>
+                                    <td>@item.CreateDate.ToString()</td>
+                                    <td class="text-center">
+                                        <a href='#' data-id="@item.id" class="btnHome">@Html.Raw(strCheckSale)</a>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a href='#' data-id="@item.id" class="btnActive">@Html.Raw(strCheck)</a>
+                                    </td>
+                                    <td>
+                                        <a href="/admin/Products/edit/@item.id" class="btn btn-sm btn-primary">Sửa</a>
+                                        <a href="#" data-id="@item.id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">Không có bản ghi nào!!!</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
             <div class="row">
                 <div class="col-6"></div>

@@ -48,7 +48,7 @@
                                 <ul class="top_nav_menu">
 
                                     <li class="account">
-                                        <a href="admin/login/index">
+                                        <a href="@Url.Action("Index", "Login", new {area="Admin"})"">
                                             Login
                                             <i class="fa fa-angle-down"></i>
                                         </a>
@@ -74,8 +74,30 @@
                             </div>
                             <nav class="navbar">
                                 @{Html.RenderAction("getMenu", "Menu"); }
+                                
                                 <ul class="navbar_user">
-                                    <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+
+                                    <li>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                @using (Html.BeginForm("Search", "Search", FormMethod.Post, new { @class = "d-flex align-items-center dropdown-item" }))
+                                                {
+                                                    <div class="form-outline" style="margin-right:10px">
+                                                        @Html.TextBox("SearchString", null, new { @class = "form-control " })
+
+                                                    </div>
+
+
+                                                }
+
+
+
+                                            </div>
+                                        </div>
+                                    </li>
                                     <li><a href="/ShoppingCart/SearchOder"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                                     <li class="checkout">
                                         <a href="/ShoppingCart">
@@ -84,6 +106,7 @@
                                         </a>
                                     </li>
                                 </ul>
+
                                 <div class="hamburger_container">
                                     <i class="fa fa-bars" aria-hidden="true"></i>
                                 </div>
@@ -94,7 +117,7 @@
             </div>
 
         </header>
-
+        
         <div class="fs_menu_overlay"></div>
         <div class="hamburger_menu">
             <div class="hamburger_close"><i class="fa fa-times" aria-hidden="true"></i></div>

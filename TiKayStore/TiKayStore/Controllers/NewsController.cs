@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using PagedList;
 
 
 namespace TiKayStore.Controllers
@@ -15,20 +16,22 @@ namespace TiKayStore.Controllers
         // GET: News
         PhoneStoreEntities1 db = new PhoneStoreEntities1();
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            //var pageSize = 1;
-            //if (page == null)
-            //{
-            //    page = 1;
-            //}
-            //IEnumerable<News> items = db.News.OrderByDescending(x => x.CreatedDate);
-            //var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            //items = items.ToPagedList(pageIndex, pageSize);
-            //ViewBag.PageSize = pageSize;
-            //ViewBag.Page = page;
-            var items = db.tb_News.ToList();
+
+            IEnumerable<tb_News> items = db.tb_News.Where(x=>x.Hide==true).OrderByDescending(x => x.id);
+            var pageSize = 6;
+            if (page == null)
+            {
+                page = 1;
+            }
+            var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            items = items.ToPagedList(pageIndex, pageSize);
+            ViewBag.PageSize = pageSize;
+            ViewBag.Page = page;
+            
             return View(items);
+
         }
 
         public ActionResult Detail(int id)
