@@ -179,6 +179,14 @@
                         <!-- Add icons to the links using the .nav-icon class
     with font-awesome or any other icon font library -->
                         <li class="nav-item">
+                            <a href="/Admin/Home" class="nav-link">
+                                <i class="nav-icon fa fa-money-check"></i>
+                                <p>
+                                    Doanh thu
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="/Admin/Category" class="nav-link">
                                 <i class="nav-icon fa fa-newspaper"></i>
                                 <p>
@@ -197,31 +205,31 @@
 
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href=@Url.Action("Index", "Products") class="nav-link">
+                                    <a href=@Url.Action("Sort", "Products") class="nav-link">
                                         <i class="fa fa-mobile nav-icon"></i>
                                         <p>Tất cả sản phẩm </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("IndexbyCategori", "Products",new { @CategoryID =1 }, null) class="nav-link">
+                                    <a href=@Url.Action("Sort", "Products",new { @Category ="Điện thoại" }, null) class="nav-link">
                                         <i class="fa fa-mobile nav-icon"></i>
                                         <p>Điện thoại</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("IndexbyCategori", "Products",new { @CategoryID =42 }, null) class="nav-link">
+                                    <a href=@Url.Action("Sort", "Products",new { @Category ="Laptop" }, null) class="nav-link">
                                         <i class="fa fa-laptop nav-icon"></i>
                                         <p>Laptop</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("IndexbyCategori", "Products",new { @CategoryID =3 }, null) class="nav-link">
+                                    <a href=@Url.Action("Sort", "Products",new { @Category ="Tablet" }, null) class="nav-link">
                                         <i class="fa fa-tablet nav-icon"></i>
                                         <p>Tablet</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href=@Url.Action("IndexbyCategori", "Products",new { @CategoryID =4 }, null) class="nav-link">
+                                    <a href=@Url.Action("Sort", "Products",new { @Category ="Phụ kiện" }, null) class="nav-link">
                                         <i class="fa fa-headphones nav-icon"></i>
                                         <p>Phụ kiện</p>
                                     </a>
@@ -248,7 +256,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../widgets.html" class="nav-link">
+                            <a href="@Url.Action("Index", "Slide")" class="nav-link">
                                 <i class="nav-icon fa fa-square" aria-hidden="true"> </i>
                                 <p>
                                     Slide
@@ -274,10 +282,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "Login")" class="nav-link">
+                            <a href="/" class="nav-link">
                                 <i class=" fa-sign-out" aria-hidden="true"></i>
                                 <p>
-                                   >>> Đăng xuất
+                                    >>> Đăng xuất
                                 </p>
                             </a>
                         </li>

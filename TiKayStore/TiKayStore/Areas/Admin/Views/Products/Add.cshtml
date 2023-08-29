@@ -102,7 +102,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <div class="form-group">
-                                                    <label for="exampleInputEmail1">Giá</label>
+                                                    <label for="exampleInputEmail1">Giá bán</label>
                                                     <input type="text" name="demoPrice" value="0" id="demoPrice" class="form-control auto" data-a-dec="," data-a-sep=".">
                                                     @Html.HiddenFor(x => x.Price, new { @class = "", @placeholder = "Giá" })
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
@@ -114,6 +114,14 @@
                                                     <input type="text" name="demoPriceSale" id="demoPriceSale" value="0" class="form-control auto">
                                                     @Html.HiddenFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Giá nhập</label>
+                                                    <input type="text" name="demoPriceSale" id="demoPriceSale" value="0" class="form-control auto">
+                                                    @Html.HiddenFor(x => x.Originalprice ,new { @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    @Html.ValidationMessageFor(x => x.Originalprice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                         </div>

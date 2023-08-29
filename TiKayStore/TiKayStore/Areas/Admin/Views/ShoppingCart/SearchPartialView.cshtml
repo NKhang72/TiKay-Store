@@ -4,7 +4,7 @@
         <i class="fa fa-search"></i>
     </button>
     <div class="dropdown-menu dropdown-menu-right" style="width:300px !important">
-        @using (Html.BeginForm("Search", "ShoppingCart", FormMethod.Post, new { @class = "dropdown-item" }))
+        @using (Html.BeginForm("Index", "ShoppingCart", FormMethod.Post, new { @class = "dropdown-item" }))
         {
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
             <div class="form-outline" style="display:flex">

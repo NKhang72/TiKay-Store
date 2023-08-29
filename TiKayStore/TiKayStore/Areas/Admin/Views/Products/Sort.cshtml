@@ -53,10 +53,10 @@
                         <i class="fa fa-search"></i>
                     </button>
                     <div class="dropdown-menu">
-                        @using (Html.BeginForm("Search", "Products", FormMethod.Post, new { @class = "d-flex align-items-center dropdown-item" }))
+                        @using (Html.BeginForm("Sort", "Products", FormMethod.Post, new { @class = "d-flex align-items-center dropdown-item" }))
                         {
                             <div class="form-outline" style="margin-right:10px">
-                                @Html.TextBox("SearchString", null, new { @class = "form-control " })
+                                @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control " })
 
                             </div>
 
@@ -93,29 +93,36 @@
                         <th>STT</th>
                         <th>Hình ảnh</th>
                         <th>
-                            @Html.ActionLink("Tên sản phẩm", "Sort", "Products", new { typeSort = "name", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
-
-                        </th>
-                        <th>Danh mục</th>
-                        <th>
-                            @Html.ActionLink("Số lượng", "Sort", "Products", new { typeSort = "quanility", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("Tên sản phẩm", "Sort", "Products", new { typeSort = ViewBag.TittleSort, currentFilter = ViewBag.CurrentFilter, currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
 
                         </th>
                         <th>
-                            @Html.ActionLink("Giá", "Sort", "Products", new { typeSort = "price", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("Danh mục", "Sort", "Products", new { typeSort = ViewBag.CategorySort, currentFilter = ViewBag.CurrentFilter, currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
 
                         </th>
                         <th>
-                            @Html.ActionLink("GiáKM", "Sort", "Products", new { typeSort = "priceSale", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("Số lượng", "Sort", "Products", new { typeSort = ViewBag.QuanitySort, currentFilter = ViewBag.CurrentFilter, currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
+
                         </th>
                         <th>
-                            @Html.ActionLink("Ngày tạo", "Sort", "Products", new { typeSort = "createDate", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("Giá bán", "Sort", "Products", new { typeSort = ViewBag.PriceSort, currentFilter = ViewBag.CurrentFilter , currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
+
                         </th>
                         <th>
-                            @Html.ActionLink("Sale", "Sort", "Products", new { typeSort = "sale", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("Giá nhập", "Sort", "Products", new { typeSort = ViewBag.Originalprice, currentFilter = ViewBag.CurrentFilter , currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
+
                         </th>
                         <th>
-                            @Html.ActionLink("Hiển thị", "Sort", "Products", new { typeSort = "hide", aS = "OrderByDescending" }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("GiáKM", "Sort", "Products", new { typeSort = ViewBag.PriceSaleSort, currentFilter = ViewBag.CurrentFilter, currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Ngày tạo", "Sort", "Products", new { typeSort = ViewBag.DateSort, currentFilter = ViewBag.CurrentFilter, currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Sale", "Sort", "Products", new { typeSort = ViewBag.SaleSort, currentFilter = ViewBag.CurrentFilter, currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Hiển thị", "Sort", "Products", new { typeSort = ViewBag.HideSort, currentFilter = ViewBag.CurrentFilter, currentCategory = ViewBag.CurrentCategory }, new { @style = "color: #000000;" })
                         </th>
 
                         <th style="width:150px;"></th>
@@ -136,28 +143,29 @@
                             {
                                 strImg = CheckImage;
                             }
-                            <tr id="trow_@item.id">
-                                <td><input type="checkbox" class="cbkItem" value="@item.id" /></td>
-                                <td>@i</td>
-                                <td><img class="imgproduct" data-id="@item.id" src="@strImg" width="50" /></td>
-                                <td>@item.Title</td>
-                                <td>@item.tb_ProductCategory.Title</td>
-                                <td>@item.Quantity</td>
-                                <td>@TiKayStore.Models.Common.Common.FormatNumber(item.Price)</td>
-                                <td>@TiKayStore.Models.Common.Common.FormatNumber(item.PriceSale)</td>
-                                <td>@item.CreateDate.ToString()</td>
-                                <td class="text-center">
-                                    <a href='#' data-id="@item.id" class="btnHome">@Html.Raw(strCheckSale)</a>
-                                </td>
+                    <tr id="trow_@item.id">
+                        <td><input type="checkbox" class="cbkItem" value="@item.id" /></td>
+                        <td>@i</td>
+                        <td><img class="imgproduct" data-id="@item.id" src="@strImg" width="50" /></td>
+                        <td>@item.Title</td>
+                        <td>@item.tb_ProductCategory.Title</td>
+                        <td>@item.Quantity</td>
+                        <td>@TiKayStore.Models.Common.Common.FormatNumber(item.Price)</td>
+                        <td>@TiKayStore.Models.Common.Common.FormatNumber(item.Originalprice)</td>
+                        <td>@TiKayStore.Models.Common.Common.FormatNumber(item.PriceSale)</td>
+                        <td>@item.CreateDate.ToString()</td>
+                        <td class="text-center">
+                            <a href='#' data-id="@item.id" class="btnHome">@Html.Raw(strCheckSale)</a>
+                        </td>
 
-                                <td class="text-center">
-                                    <a href='#' data-id="@item.id" class="btnActive">@Html.Raw(strCheck)</a>
-                                </td>
-                                <td>
-                                    <a href="/admin/Products/edit/@item.id" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="#" data-id="@item.id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
-                                </td>
-                            </tr>
+                        <td class="text-center">
+                            <a href='#' data-id="@item.id" class="btnActive">@Html.Raw(strCheck)</a>
+                        </td>
+                        <td>
+                            <a href="/admin/Products/edit/@item.id" class="btn btn-sm btn-primary">Sửa</a>
+                            <a href="#" data-id="@item.id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                        </td>
+                    </tr>
                             i++;
                         }
                     }
@@ -244,6 +252,9 @@
                                 if (rs.success) {
                                     location.reload();
                                 }
+                                else {
+                                    alert("Bạn không được cấp quyền để thực hiện tính năng này.");
+                                }
                             }
                         });
                     }
@@ -273,6 +284,9 @@
                         success: function (rs) {
                             if (rs.success) {
                                 $('#trow_' + id).remove();
+                            }
+                            else {
+                                alert("Bạn không được cấp quyền để thực hiện tính năng này.");
                             }
                         }
                     });

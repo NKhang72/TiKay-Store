@@ -10,7 +10,7 @@
                     <!-- Có foreach nó ko ra dòng h6 h1 -->
                     <div class="main_slider_content">
                         <h6 style=" /* font-size: xx-large; */ /* font-style: italic; */ font: initial; font-size: xx-large; font-style: italic; ">@i.Title</h6>
-                        <h1 style=" font-size: xxx-large; color: brown; ">@i.Description</h1>
+                        <h1 style=" font-size: xxx-large; color: brown; ">@Html.Raw(i.Description)</h1>
                         <div class="red_button shop_now_button">
                         @Html.ActionLink("SHOP NOW", "getProductbyMeta", "Category", new {id=1}, null)
                         </div>

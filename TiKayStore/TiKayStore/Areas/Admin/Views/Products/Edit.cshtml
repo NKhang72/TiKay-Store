@@ -23,7 +23,56 @@
         </li>
     </ul>
 }
+<style>
 
+    .dropdown-submenu {
+        position: relative;
+    }
+
+        .dropdown-submenu > .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -6px;
+            margin-left: -1px;
+            -webkit-border-radius: 0 6px 6px 6px;
+            -moz-border-radius: 0 6px 6px;
+            border-radius: 0 6px 6px 6px;
+        }
+
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-submenu > a:after {
+            display: block;
+            content: " ";
+            float: right;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 5px 0 5px 5px;
+            border-left-color: #ccc;
+            margin-top: 5px;
+            margin-right: -10px;
+        }
+
+        .dropdown-submenu:hover > a:after {
+            border-left-color: #fff;
+        }
+
+        .dropdown-submenu.pull-left {
+            float: none;
+        }
+
+            .dropdown-submenu.pull-left > .dropdown-menu {
+                left: -100%;
+                margin-left: 10px;
+                -webkit-border-radius: 6px 0 6px 6px;
+                -moz-border-radius: 6px 0 6px 6px;
+                border-radius: 6px 0 6px 6px;
+            }
+</style>
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -110,7 +159,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <div class="form-group">
-                                                    <label for="exampleInputEmail1">Giá</label>
+                                                    <label for="exampleInputEmail1">Giá bán </label>
                                                     <input type="text" name="demoPrice" id="demoPrice" value="@Model.Price" class="form-control auto" data-a-dec="," data-a-sep=".">
                                                     @Html.HiddenFor(x => x.Price, new { @class = "", @placeholder = "Giá" })
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
@@ -122,6 +171,14 @@
                                                     <input type="text" name="demoPriceSale" id="demoPriceSale" value="@Model.PriceSale" class="form-control auto">
                                                     @Html.HiddenFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Giá nhập</label>
+                                                    <input type="text" name="demoPriceSale" id="demoPriceSale" value="0" class="form-control auto">
+                                                    @Html.HiddenFor(x => x.Originalprice, new { @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    @Html.ValidationMessageFor(x => x.Originalprice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                         </div>

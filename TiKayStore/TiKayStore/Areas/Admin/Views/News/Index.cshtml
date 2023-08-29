@@ -165,6 +165,9 @@
                             if (rs.success) {
                                 location.reload();
                             }
+                            else {
+                                alert("Bạn không được cấp quyền để thực hiện tính năng này.");
+                            }
                         }
                     });
                 }
@@ -194,6 +197,9 @@
                     success: function (rs) {
                         if (rs.success) {
                             $('#trow_' + id).remove();
+                        }
+                        else {
+                            alert("Bạn không được cấp quyền để thực hiện tính năng này.");
                         }
                     }
                 });

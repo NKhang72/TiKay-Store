@@ -1,9 +1,8 @@
 ﻿
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<!-- Content Header (Page header) -->
+
 @section naviheader{
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -13,9 +12,249 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a href="/admin/home" class="nav-link">Home</a>
         </li>
-
-
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Menu</a>
+        </li>
     </ul>
 }
 
+<!-- Main content -->
+<section class="content">
 
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thống kê danh thu</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                <div style=" display: flex; margin: 13px; align-items: baseline; justify-content: flex-end; ">
+                    <div style="margin: 8px;">
+                        <label for="fromDate">Từ :</label>
+                        <input type="date" id="fromDate" name="fromDate">
+                    </div>
+                    <div style="margin: 8px;">
+                        <label for="toDate">Đến :</label>
+                        <input type="date" id="toDate" name="toDate">
+                    </div>
+                    <button style="margin: 8px;" type="submit" class="btn btn-success btnSubmit">Tìm</button>
+                </div>
+                <div>
+                    <div class="chart">
+                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+                <div>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Ngày</th>
+                                <th>Doanh thu</th>
+                                <th>Lợi nhuận</th>
+                            </tr>
+                        </thead>
+                        <tbody id="load_data"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Footer
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+@section scripts{
+
+    <script src="~/Content/admin/plugins/chart.js/Chart.min.js"></script>
+    <script src="~/Content/admin/plugins/moment/moment.min.js"></script>
+    <script>
+        $('body').on('click', '.btnSubmit', function () {
+            var toDate = new Date($('#toDate').val());
+            var fromDate = new Date($('#fromDate').val());
+            var toDay = new Date();
+            toDatestr = ((toDate.getMonth() > 8) ? (toDate.getMonth() + 1) : ('0' + (toDate.getMonth() + 1))) + '/' + ((toDate.getDate() > 9) ? toDate.getDate() : ('0' + toDate.getDate())) + '/' + toDate.getFullYear();
+            fromDatestr = ((fromDate.getMonth() > 8) ? (fromDate.getMonth() + 1) : ('0' + (fromDate.getMonth() + 1))) + '/' + ((fromDate.getDate() > 9) ? fromDate.getDate() : ('0' + fromDate.getDate())) + '/' + fromDate.getFullYear();
+            if (toDatestr.toString() == "0NaN/0NaN/NaN" || fromDatestr.toString() == "0NaN/0NaN/NaN") {
+                alert("Vui lòng chọn ngày cần xem thông kê");
+            }
+            if (toDate.toString() != "0NaN/0NaN/NaN" && fromDate.toString() != "0NaN/0NaN/NaN") {
+                if (toDate <= fromDate || toDate > toDay || fromDate > toDay) {
+                    alert("Ngày được chọn không hợp lệ");
+                }
+                else if (toDate > fromDate) {
+
+                    var arrDoanhThu = [];
+                    var arrLoiNhuan = [];
+                    var arrDate = [];
+                    $.ajax({
+                        url: '/Statistical/GetStatistical',
+                        type: 'GET',
+                        data: { fromDate: fromDatestr, toDate: toDatestr },
+                        success: function (rs) {
+
+                            $.each(rs.Data, function (i, item) {
+                                var strDate = moment(item.Date).format('DD/MM/yyyy');
+                                arrDate.push(strDate);
+                                arrDoanhThu.push(item.DoanhThu);
+                                arrLoiNhuan.push(item.LoiNhuan);
+                            });
+                            var areaChartData = {
+                                labels: arrDate,
+                                datasets: [
+                                    {
+                                        label: 'Lợi nhuận',
+                                        backgroundColor: 'rgba(60,141,188,0.9)',
+                                        borderColor: 'rgba(60,141,188,0.8)',
+                                        pointRadius: false,
+                                        pointColor: '#3b8bba',
+                                        pointStrokeColor: 'rgba(60,141,188,1)',
+                                        pointHighlightFill: '#fff',
+                                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                                        data: arrLoiNhuan
+                                    },
+                                    {
+                                        label: 'Danh thu',
+                                        backgroundColor: 'rgba(210, 214, 222, 1)',
+                                        borderColor: 'rgba(210, 214, 222, 1)',
+                                        pointRadius: false,
+                                        pointColor: 'rgba(210, 214, 222, 1)',
+                                        pointStrokeColor: '#c1c7d1',
+                                        pointHighlightFill: '#fff',
+                                        pointHighlightStroke: 'rgba(220,220,220,1)',
+                                        data: arrDoanhThu
+                                    },
+                                ]
+                            }
+                            //-------------
+                            //- BAR CHART -
+                            //-------------
+                            var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                            var barChartData = $.extend(true, {}, areaChartData)
+                            var temp0 = areaChartData.datasets[0]
+                            var temp1 = areaChartData.datasets[1]
+                            barChartData.datasets[0] = temp1
+                            barChartData.datasets[1] = temp0
+
+                            var barChartOptions = {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                datasetFill: false
+                            }
+
+                            new Chart(barChartCanvas, {
+                                type: 'bar',
+                                data: barChartData,
+                                options: barChartOptions
+                            });
+                            load_data(rs.Data);
+                        }
+                    });
+
+                }
+            }
+
+
+        })
+        $(function () {
+
+            var arrDoanhThu = [];
+            var arrLoiNhuan = [];
+            var arrDate = [];
+            $.ajax({
+                url: '/Statistical/GetStatistical',
+                type: 'GET',
+                data: { fromDate: '', toDate: '' },
+                success: function (rs) {
+
+                    $.each(rs.Data, function (i, item) {
+                        var strDate = moment(item.Date).format('DD/MM/yyyy');
+                        arrDate.push(strDate);
+                        arrDoanhThu.push(item.DoanhThu);
+                        arrLoiNhuan.push(item.LoiNhuan);
+                    });
+                    var areaChartData = {
+                        labels: arrDate,
+                        datasets: [
+                            {
+                                label: 'Lợi nhuận',
+                                backgroundColor: 'rgba(60,141,188,0.9)',
+                                borderColor: 'rgba(60,141,188,0.8)',
+                                pointRadius: false,
+                                pointColor: '#3b8bba',
+                                pointStrokeColor: 'rgba(60,141,188,1)',
+                                pointHighlightFill: '#fff',
+                                pointHighlightStroke: 'rgba(60,141,188,1)',
+                                data: arrLoiNhuan
+                            },
+                            {
+                                label: 'Danh thu',
+                                backgroundColor: 'rgba(210, 214, 222, 1)',
+                                borderColor: 'rgba(210, 214, 222, 1)',
+                                pointRadius: false,
+                                pointColor: 'rgba(210, 214, 222, 1)',
+                                pointStrokeColor: '#c1c7d1',
+                                pointHighlightFill: '#fff',
+                                pointHighlightStroke: 'rgba(220,220,220,1)',
+                                data: arrDoanhThu
+                            },
+                        ]
+                    }
+                    //-------------
+                    //- BAR CHART -
+                    //-------------
+                    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                    var barChartData = $.extend(true, {}, areaChartData)
+                    var temp0 = areaChartData.datasets[0]
+                    var temp1 = areaChartData.datasets[1]
+                    barChartData.datasets[0] = temp1
+                    barChartData.datasets[1] = temp0
+
+                    var barChartOptions = {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        datasetFill: false
+                    }
+
+                    new Chart(barChartCanvas, {
+                        type: 'bar',
+                        data: barChartData,
+                        options: barChartOptions
+                    });
+                    load_data(rs.Data);
+                }
+            });
+
+
+        })
+
+        function load_data(data) {
+            var strHtml = "";
+            $.each(data, function (i, item) {
+                var strDate = moment(item.Date).format('DD/MM/yyyy');
+                strHtml += "<tr>";
+                strHtml += "<td>" + (i + 1) + "</td>";
+                strHtml += "<td>" + strDate + "</td>";
+                strHtml += "<td>" + item.DoanhThu + "</td>";
+                strHtml += "<td>" + item.LoiNhuan + "</td>";
+                strHtml += "</tr>";
+            });
+            $('#load_data').html(strHtml);
+        }
+    </script>
+}

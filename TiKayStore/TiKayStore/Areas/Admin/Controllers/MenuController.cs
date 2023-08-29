@@ -29,7 +29,16 @@ namespace TiKayStore.Areas.Admin.Controllers
         }
         public ActionResult Add()
         {
-            return View();
+            UserLogin user = (UserLogin)Session["USER_SESSION"];
+            var count = db.tb_Indentify.Count(x => x.IdUser == user.UserId & x.IdPermission == 1);
+            if (count > 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Unpermitted", "Error");
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -57,8 +66,17 @@ namespace TiKayStore.Areas.Admin.Controllers
         }
         public ActionResult Edit(int id)
         {
-            var item = db.tb_Menu.Find(id);
-            return View(item);
+            UserLogin user = (UserLogin)Session["USER_SESSION"];
+            var count = db.tb_Indentify.Count(x => x.IdUser == user.UserId & x.IdPermission == 1);
+            if (count > 0)
+            {
+                var item = db.tb_Menu.Find(id);
+                return View(item);
+            }
+            else
+            {
+                return RedirectToAction("Unpermitted", "Error");
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -83,14 +101,24 @@ namespace TiKayStore.Areas.Admin.Controllers
         }
         public ActionResult Delete(int id)
         {
-            var item = db.tb_Menu.Find(id);
-            if (item != null)
+            UserLogin user = (UserLogin)Session["USER_SESSION"];
+            var count = db.tb_Indentify.Count(x => x.IdUser == user.UserId & x.IdPermission == 1);
+            if (count > 0)
             {
-                db.tb_Menu.Remove(item);
-                db.SaveChanges();
-                return Json(new { success = true });
+                var item = db.tb_Menu.Find(id);
+                if (item != null)
+                {
+                    db.tb_Menu.Remove(item);
+                    db.SaveChanges();
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false });
             }
-            return Json(new { success = false });
+            else
+            {
+                return Json(new { success = false });
+
+            }
         }
     }
 }

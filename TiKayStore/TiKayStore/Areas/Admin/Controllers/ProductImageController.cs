@@ -36,13 +36,28 @@ namespace TiKayStore.Areas.Admin.Controllers
             var item = db.tb_ProductImage.Find(id);
             db.tb_ProductImage.Remove(item);
             int productId = item.productId;
-            tb_ProductImage items = db.tb_ProductImage.Where(y => y.productId == productId && y.id != id).FirstOrDefault();
-            tb_Product product = db.tb_Product.Where(y => y.id == productId).FirstOrDefault();
-            if (items != null)
+            Boolean checkDefault = false; //find image default of product.
+            List<tb_ProductImage> items = db.tb_ProductImage.Where(y => y.productId == productId && y.id != id).ToList();
+            foreach(tb_ProductImage i in items)
             {
-                items.isDefault = true;
-                product.Image = items.image;
+                if (i.isDefault == true)
+                {
+                    checkDefault=true;
+                    break;
+                }
             }
+            if(checkDefault == false)
+            {
+                tb_ProductImage productImage = db.tb_ProductImage.Where(y => y.productId == productId && y.id != id).FirstOrDefault();
+
+                tb_Product product = db.tb_Product.Where(y => y.id == productId).FirstOrDefault();
+                if (items != null)
+                {
+                    productImage.isDefault = true;
+                    product.Image = productImage.image;
+                }
+            }
+            
 
 
             db.SaveChanges();

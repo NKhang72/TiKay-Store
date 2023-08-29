@@ -22,7 +22,7 @@ namespace TiKayStore.Controllers
         {
             
             IEnumerable<tb_Product> items = db.tb_Product.Where(x=> x.ProductCategory==id && x.Hide==true).OrderByDescending(x=>x.id);
-            var pageSize = 10;
+            var pageSize = 8;
             if (page == null)
             {
                 page = 1;

@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using TiKayStore.Models;
 using PagedList;
+using System.Configuration;
+
 namespace TiKayStore.Controllers
 {
 
@@ -132,7 +134,7 @@ namespace TiKayStore.Controllers
                 {
 
                     new SelectListItem { Selected = true, Text = "COD", Value = "1"},
-                    new SelectListItem { Selected = false, Text = "Chuyển khoảng", Value = "2"},
+                    new SelectListItem { Selected = false, Text = "Chuyển khoản", Value = "2"},
                 }, "Value", "Text", 1);
 
             return View();
@@ -163,6 +165,46 @@ namespace TiKayStore.Controllers
                 model.Code = model.TypePay + model.Phone + rd.Next(0, 100);
                 db.tb_Order.Add(model);
                 db.SaveChanges();
+
+                //send mail cho khachs hang
+                var strSanPham = "";
+                var thanhtien = decimal.Zero;
+                var TongTien = decimal.Zero;
+                foreach (var sp in cart.Items)
+                {
+                    strSanPham += "<tr>";
+                    strSanPham += "<td>" + sp.ProductName + "</td>";
+                    strSanPham += "<td>" + sp.Quantity + "</td>";
+                    strSanPham += "<td>" + TiKayStore.Models.Common.Common.FormatNumber(sp.TotalPrice, 0) + "</td>";
+                    strSanPham += "</tr>";
+                    thanhtien += sp.Price * sp.Quantity;
+                }
+                TongTien = thanhtien;
+                string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/mail/send2.html"));
+                contentCustomer = contentCustomer.Replace("{{MaDon}}", model.Code);
+                contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
+                contentCustomer = contentCustomer.Replace("{{NgayDat}}", DateTime.Now.ToString("dd/MM/yyyy"));
+                contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", model.CustomerName);
+                contentCustomer = contentCustomer.Replace("{{Phone}}", model.Phone);
+                contentCustomer = contentCustomer.Replace("{{Email}}", model.Email);
+                contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", model.Address);
+                contentCustomer = contentCustomer.Replace("{{ThanhTien}}", TiKayStore.Models.Common.Common.FormatNumber(thanhtien, 0));
+                contentCustomer = contentCustomer.Replace("{{TongTien}}", TiKayStore.Models.Common.Common.FormatNumber(TongTien, 0));
+                TiKayStore.Commom.Common.SendMail("TiKayStore", "Đơn hàng #" + model.Code, contentCustomer.ToString(), model.Email);
+
+                string contentAdmin = System.IO.File.ReadAllText(Server.MapPath("~/Content/mail/send1.html"));
+                contentAdmin = contentAdmin.Replace("{{MaDon}}", model.Code);
+                contentAdmin = contentAdmin.Replace("{{SanPham}}", strSanPham);
+                contentAdmin = contentAdmin.Replace("{{NgayDat}}", DateTime.Now.ToString("dd/MM/yyyy"));
+                contentAdmin = contentAdmin.Replace("{{TenKhachHang}}", model.CustomerName);
+                contentAdmin = contentAdmin.Replace("{{Phone}}", model.Phone);
+                contentAdmin = contentAdmin.Replace("{{Email}}", model.Email);
+                contentAdmin = contentAdmin.Replace("{{DiaChiNhanHang}}", model.Address);
+                contentAdmin = contentAdmin.Replace("{{ThanhTien}}", TiKayStore.Models.Common.Common.FormatNumber(thanhtien, 0));
+                contentAdmin = contentAdmin.Replace("{{TongTien}}", TiKayStore.Models.Common.Common.FormatNumber(TongTien, 0));
+                TiKayStore.Commom.Common.SendMail("TiKayStore", "Đơn hàng mới #" + model.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["EmailAdmin"]);
+
+
                 cart.ClearCart();
                 return RedirectToAction("Suscess");
             }

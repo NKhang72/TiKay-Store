@@ -27,7 +27,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Quản lý sản phẩm</h1>
+                <h1>Quản lý nhân sự</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -94,23 +94,25 @@
                             {
                                 strImg = CheckImage;
                             }
-                            <tr id="trow_@item.id">
-                                <td><input type="checkbox" class="cbkItem" value="@item.id" /></td>
-                                <td>@i</td>
-                                <td><img class="imgproduct" data-id="@item.id" src="@strImg" width="50" /></td>
-                                <td>@item.firstName</td>
-                                <td>@item.lastName</td>
-                                <td>@item.email</td>
+                    <tr id="trow_@item.id">
+                        <td><input type="checkbox" class="cbkItem" value="@item.id" /></td>
+                        <td>@i</td>
+                        <td><img class="imgproduct" data-id="@item.id" src="@strImg" width="50" /></td>
+                        <td>@item.firstName</td>
+                        <td>@item.lastName</td>
+                        <td>@item.email</td>
 
 
-                                <td class="text-center">
-                                    <a href='#' data-id="@item.id" class="btnActive">@Html.Raw(strCheck)</a>
-                                </td>
-                                <td>
+                        <td class="text-center">
+                            <a href='#' data-id="@item.id" class="btnActive">@Html.Raw(strCheck)</a>
+                        </td>
+                        <td>
+                            <a href="#" data-id="@item.id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                            <a href="/admin/Login/Edit/@item.id" class="btn btn-sm btn-primary">Sửa</a>
+                        </td>
 
-                                    <a href="#" data-id="@item.id" class="btn btn-sm btn-danger btnDelete">Xóa</a>
-                                </td>
-                            </tr>
+
+                    </tr>
                             i++;
                         }
                     }
@@ -179,6 +181,9 @@
                                 if (rs.success) {
                                     location.reload();
                                 }
+                                else {
+                                    alert("Bạn không được cấp quyền để thực hiện tính năng này.");
+                                }
                             }
                         });
                     }
@@ -209,6 +214,9 @@
                             if (rs.success) {
                                 $('#trow_' + id).remove();
                             }
+                            else {
+                                alert("Bạn không được cấp quyền để thực hiện tính năng này.");
+                            }
                         }
                     });
                 }
@@ -236,6 +244,9 @@
                                     btn.html("<i class='fas fa-times text-danger'></i>");
 
                                 }
+                            }
+                            else {
+                                alert("Bạn không được cấp quyền để thực hiện tính năng này.");
                             }
 
                         }

@@ -14,21 +14,107 @@ namespace TiKayStore.Areas.Admin.Controllers
     {
         PhoneStoreEntities1 db = new PhoneStoreEntities1();
         // GET: Admin/ShoppingCart
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string typeSort, string currentFilter, string currentSortType, SearchOrder searchOrder)
         {
+            ViewBag.CurrentSort = typeSort;
 
-            var items = db.tb_Order.OrderByDescending(x => x.CreateDate).ToList();
+            ViewBag.Code = typeSort == "Code" ? "code_desc" : "Code";
+            ViewBag.Name = typeSort == "Name" ? "name_desc" : "Name";
+            ViewBag.Phone = typeSort == "Phone" ? "phone_desc" : "Phone";
+            ViewBag.Money = typeSort == "Money" ? "money_desc" : "Money";
+            ViewBag.State = typeSort == "State" ? "state_desc" : "State";
+            ViewBag.DateSort = String.IsNullOrEmpty(typeSort) ? "date_desc" : "";
 
+            if (searchOrder.SearchString != null )
+            {
+                page = 1;
+            }
+            else
+            {
+                searchOrder.SearchString = currentFilter;
+                searchOrder.SearchType= currentSortType;
+                
+            }
+
+            ViewBag.CurrentFilter = searchOrder.SearchString;
+            ViewBag.CurrentSortType = searchOrder.SearchType;
+
+            IEnumerable<tb_Order> items = db.tb_Order;
+
+            if (!String.IsNullOrEmpty(searchOrder.SearchString))
+            {
+                if (searchOrder.SearchType == "Số điện thoại")
+                {
+                    items = items.Where(x => x.Phone.Contains(searchOrder.SearchString));
+
+                }
+                else if (searchOrder.SearchType == "Mã đơn hàng")
+                {
+                    items = items.Where(x => x.Code.Contains(searchOrder.SearchString));
+
+                }
+                else
+                {
+                    items = items.Where(x => x.CustomerName.Contains(searchOrder.SearchString));
+
+                }
+            }
+            
+
+            switch (typeSort)
+            {
+                case "date_desc":
+                    items = items.OrderByDescending(s => s.CreateDate);
+                    break;
+
+                case "Code":
+                    items = items.OrderBy(s => s.Code);
+                    break;
+                case "code_desc":
+                    items = items.OrderByDescending(s => s.Code);
+                    break;
+
+                case "Name":
+                    items = items.OrderBy(s => s.CustomerName);
+                    break;
+                case "name_desc":
+                    items = items.OrderByDescending(s => s.CustomerName);
+                    break;
+
+                case "Phone":
+                    items = items.OrderBy(s => s.Phone);
+                    break;
+                case "phone_desc":
+                    items = items.OrderByDescending(s => s.Phone);
+                    break;
+
+                case "State":
+                    items = items.OrderBy(s => s.TypePay);
+                    break;
+                case "state_desc":
+                    items = items.OrderByDescending(s => s.TypePay);
+                    break;
+
+                case "Money":
+                    items = items.OrderBy(s => s.TotalAmount);
+                    break;
+                case "money_desc":
+                    items = items.OrderByDescending(s => s.TotalAmount);
+                    break;
+                default:
+                    items = items.OrderBy(s => s.CreateDate);
+                    break;
+            }
+            var pageSize = 10;
             if (page == null)
             {
                 page = 1;
             }
-            var pageNumber = page ?? 1;
-            var pageSize = 10;
+            var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            items = items.ToPagedList(pageIndex, pageSize);
             ViewBag.PageSize = pageSize;
-            ViewBag.Page = pageNumber;
-            
-            return View(items.ToPagedList(pageNumber, pageSize));
+            ViewBag.Page = page;
+            return View(items);
         }
         [HttpPost]
         public ActionResult Update(int id)

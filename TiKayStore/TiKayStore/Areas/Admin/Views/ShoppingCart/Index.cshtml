@@ -36,12 +36,26 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Mã đơn hàng</th>
-                        <th>Tên Khách hàng</th>
-                        <th>Phone</th>
-                        <th>Tiền</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
+                        <th>
+                            @Html.ActionLink("Mã đơn hàng", "Index", "ShoppingCart", new { typeSort = ViewBag.Code, currentFilter = ViewBag.CurrentFilter, currentSortType= ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+
+                        </th>
+                        <th>
+                            @Html.ActionLink("Tên Khách hàng", "Index", "ShoppingCart", new { typeSort = ViewBag.Name, currentFilter = ViewBag.CurrentFilter , currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+
+                        </th>
+                        <th>
+                            @Html.ActionLink("Số điện thoại", "Index", "ShoppingCart", new { typeSort = ViewBag.Phone, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Tiền", "Index", "ShoppingCart", new { typeSort = ViewBag.Money, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Trạng thái", "Index", "ShoppingCart", new { typeSort = ViewBag.State, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+                        </th>
+                        <th>
+                            @Html.ActionLink("Ngày tạo", "Index", "ShoppingCart", new { typeSort = ViewBag.Date, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
