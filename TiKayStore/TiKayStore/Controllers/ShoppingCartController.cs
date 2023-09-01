@@ -161,6 +161,7 @@ namespace TiKayStore.Controllers
                 model.CreateDate = DateTime.Now;
                 model.ModifierDate = DateTime.Now;
                 model.CreateBy = model.Phone;
+                model.isRead = false;
                 Random rd = new Random();
                 model.Code = model.TypePay + model.Phone + rd.Next(0, 100);
                 db.tb_Order.Add(model);

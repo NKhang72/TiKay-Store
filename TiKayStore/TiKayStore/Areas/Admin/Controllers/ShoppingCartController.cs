@@ -23,6 +23,7 @@ namespace TiKayStore.Areas.Admin.Controllers
             ViewBag.Phone = typeSort == "Phone" ? "phone_desc" : "Phone";
             ViewBag.Money = typeSort == "Money" ? "money_desc" : "Money";
             ViewBag.State = typeSort == "State" ? "state_desc" : "State";
+            ViewBag.IsRead = typeSort == "IsRead" ? "isRead_desc" : "IsRead";
             ViewBag.DateSort = String.IsNullOrEmpty(typeSort) ? "date_desc" : "";
 
             if (searchOrder.SearchString != null )
@@ -64,7 +65,7 @@ namespace TiKayStore.Areas.Admin.Controllers
             switch (typeSort)
             {
                 case "date_desc":
-                    items = items.OrderByDescending(s => s.CreateDate);
+                    items = items.OrderBy(s => s.CreateDate);
                     break;
 
                 case "Code":
@@ -72,6 +73,12 @@ namespace TiKayStore.Areas.Admin.Controllers
                     break;
                 case "code_desc":
                     items = items.OrderByDescending(s => s.Code);
+                    break;
+                case "IsRead":
+                    items = items.OrderBy(s => s.isRead);
+                    break;
+                case "isRead_desc":
+                    items = items.OrderByDescending(s => s.isRead);
                     break;
 
                 case "Name":
@@ -102,7 +109,7 @@ namespace TiKayStore.Areas.Admin.Controllers
                     items = items.OrderByDescending(s => s.TotalAmount);
                     break;
                 default:
-                    items = items.OrderBy(s => s.CreateDate);
+                    items = items.OrderByDescending(s => s.CreateDate);
                     break;
             }
             var pageSize = 10;
@@ -143,6 +150,9 @@ namespace TiKayStore.Areas.Admin.Controllers
         public ActionResult View(int id)
         {
             var item = db.tb_Order.Find(id);
+            item.isRead= true;
+            db.Entry(item).Property(x => x.isRead).IsModified = true;
+            db.SaveChanges();
             return View(item);
         }
         public ActionResult SearchPartialView()

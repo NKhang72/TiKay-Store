@@ -23,6 +23,12 @@ namespace TiKayStore.Areas.Admin.Controllers
         {
             return View("~/Views/Home/Index.cshtml");
         }
+        public static int CountOder()
+        {
+            PhoneStoreEntities1 db = new PhoneStoreEntities1();
+            int count= db.tb_Order.Where(x => x.isRead==false).Count();
+            return count;
+        }
         public ActionResult Login(LoginModel model)
         {
             if (ModelState.IsValid)

@@ -64,25 +64,35 @@ namespace TiKayStore.Areas.Admin.Controllers
         }
         public ActionResult IsActive(int id)
         {
-            var item = db.tb_Advertisement.Find(id);
-            List<tb_Advertisement> listAds= db.tb_Advertisement.ToList();
-            foreach(var ad in listAds)
+            UserLogin user = (UserLogin)Session["USER_SESSION"];
+            var count = db.tb_Indentify.Count(x => x.IdUser == user.UserId & x.IdPermission == 20);
+            if (count > 0)
             {
-                if(ad.id == id)
+                var item = db.tb_Advertisement.Find(id);
+                List<tb_Advertisement> listAds = db.tb_Advertisement.ToList();
+                foreach (var ad in listAds)
                 {
-                    ad.Hide = true;
+                    if (ad.id == id)
+                    {
+                        ad.Hide = true;
+                    }
+                    else
+                    {
+                        ad.Hide = false;
+                    }
+                    db.tb_Advertisement.Attach(ad);
+                    db.Entry(ad).Property(x => x.Hide).IsModified = true;
+                    db.SaveChanges();
                 }
-                else
-                {
-                    ad.Hide = false;
-                }
-                db.tb_Advertisement.Attach(ad);
-                db.Entry(ad).Property(x => x.Hide).IsModified = true;
-                db.SaveChanges();
+
+                return Json(new { message = "Success", success = true, isAcive = true });
+
             }
-            
-            return Json(new { message = "Success", Success = true, isAcive = true });
-            
+            else
+            {
+                return Json(new { success = false });
+
+            }
         }
         public ActionResult Add()
         {

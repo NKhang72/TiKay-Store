@@ -37,11 +37,11 @@
                     <tr>
                         <th>#</th>
                         <th>
-                            @Html.ActionLink("Mã đơn hàng", "Index", "ShoppingCart", new { typeSort = ViewBag.Code, currentFilter = ViewBag.CurrentFilter, currentSortType= ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("Mã đơn hàng", "Index", "ShoppingCart", new { typeSort = ViewBag.Code, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
 
                         </th>
                         <th>
-                            @Html.ActionLink("Tên Khách hàng", "Index", "ShoppingCart", new { typeSort = ViewBag.Name, currentFilter = ViewBag.CurrentFilter , currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+                            @Html.ActionLink("Tên Khách hàng", "Index", "ShoppingCart", new { typeSort = ViewBag.Name, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
 
                         </th>
                         <th>
@@ -56,6 +56,9 @@
                         <th>
                             @Html.ActionLink("Ngày tạo", "Index", "ShoppingCart", new { typeSort = ViewBag.Date, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
                         </th>
+                        <th>
+                            @Html.ActionLink("Đã xử lý", "Index", "ShoppingCart", new { typeSort = ViewBag.IsRead, currentFilter = ViewBag.CurrentFilter, currentSortType = ViewBag.CurrentSortType }, new { @style = "color: #000000;" })
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -66,19 +69,25 @@
                         var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
                         foreach (var item in Model)
                         {
-                            <tr>
-                                <td>@i</td>
-                                <td>@item.Code</td>
-                                <td>@item.CustomerName</td>
-                                <td>@item.Phone</td>
-                                <td>@TiKayStore.Models.Common.Common.FormatNumber(item.TotalAmount, 0)</td>
-                                <td>@(item.TypePay=="1"?"Chờ thành toán":"Đã thanh toán")</td>
-                                <td>@item.CreateDate.ToString()</td>
-                                <td>
-                                    <a href="/admin/shoppingcart/view/@item.id" class="btn btn-sm btn-success">Xem</a>
-                                    <a href="#" class="btn btn-sm btn-danger btnCapNhat" data-id="@item.id">Cập nhật</a>
-                                </td>
-                            </tr>
+                            var strCheck = item.isRead.Value ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Code</td>
+                        <td>@item.CustomerName</td>
+                        <td>@item.Phone</td>
+                        <td>@TiKayStore.Models.Common.Common.FormatNumber(item.TotalAmount, 0)</td>
+                        <td>@(item.TypePay=="1"?"Chờ thành toán":"Đã thanh toán")</td>
+                        <td>@item.CreateDate.ToString()</td>
+                        <td class="text-center">
+                            <a href='#' data-id="@item.id" class="btnActive">@Html.Raw(strCheck)</a>
+                        </td>
+
+                        <td>
+                            <a href="/admin/shoppingcart/view/@item.id" class="btn btn-sm btn-success">Xem</a>
+                            <a href="#" class="btn btn-sm btn-danger btnCapNhat" data-id="@item.id">Cập nhật</a>
+                        </td>
+                    </tr>
                             i++;
                         }
                     }

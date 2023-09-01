@@ -221,7 +221,7 @@ namespace TiKayStore.Areas.Admin.Controllers
                     model.Meta = TiKayStore.Models.Common.Filter.FilterChar(model.Title);
                 db.tb_Product.Add(model);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Sort");
             }
             ViewBag.ProductCategory = new SelectList(db.tb_ProductCategory.ToList(), "id", "Title");
             return View(model);
@@ -255,7 +255,7 @@ namespace TiKayStore.Areas.Admin.Controllers
                 db.tb_Product.Attach(model);
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Sort");
             }
             return View(model);
         }
